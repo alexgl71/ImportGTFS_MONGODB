@@ -5,7 +5,7 @@ const { parse } = require('csv-parse/sync');
 
 const GTFS_URL = 'https://www.gtt.to.it/open_data/gtt_gtfs.zip';
 const MONGO_URI = 'mongodb://localhost:27017';
-const DB_NAME = 'GTFS';
+const DB_NAME = 'Torino';
 
 const EXCLUDE_FIELDS = {
   routes:     ['route_url', 'route_color', 'route_text_color'],
