@@ -720,6 +720,7 @@ async function syncToRemote(localDb) {
 
 async function main() {
   const tTotal = performance.now();
+  const USE_REMOTE = process.argv.includes('--use-remote');
 
   const client = new MongoClient(MONGO_URI);
   await client.connect();
@@ -732,7 +733,16 @@ async function main() {
     await syncToRemote(db);
   }
 
-  await findRoutesBetween(db, SEARCH_CONFIG);
+  if (USE_REMOTE && REMOTE_URI) {
+    console.log('[--use-remote] calcolo su Atlas remote\n');
+    const remoteClient = new MongoClient(REMOTE_URI);
+    await remoteClient.connect();
+    const remoteDb = remoteClient.db(SEARCH_CONFIG.dbName);
+    await findRoutesBetween(remoteDb, SEARCH_CONFIG);
+    await remoteClient.close();
+  } else {
+    await findRoutesBetween(db, SEARCH_CONFIG);
+  }
 
   await client.close();
   console.log(`\n[total] ${ms(tTotal)}`);
