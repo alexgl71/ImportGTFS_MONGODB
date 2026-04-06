@@ -1,12 +1,14 @@
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const axios = require('axios');
 const AdmZip = require('adm-zip');
 const { parse } = require('csv-parse/sync');
 
-const GTFS_URL   = 'https://romamobilita.it/sites/default/files/rome_static_gtfs.zip';
+const GTFS_URL   = 'https://www.gtt.to.it/open_data/gtt_gtfs.zip';
 const MONGO_URI  = 'mongodb://localhost:27017';
-const DB_NAME    = 'Roma';
-const AGENCY_IDS = ['OP1'];
+const REMOTE_URI = process.env.REMOTE_URI || ''; // impostato in .env
+const DB_NAME    = 'Torino';
+const AGENCY_IDS = ['U'];
 
 const EXCLUDE_FIELDS = {
   routes:     ['route_url', 'route_color', 'route_text_color'],
@@ -127,8 +129,8 @@ const MAX_DURATION_SEC    = 60 * 60;  // durata massima totale viaggio
 // --- Configurazione ricerca (dbName + coordinate: varia per città/query) ---
 const SEARCH_CONFIG = {
   dbName:      DB_NAME,
-  origin:      { lat: 41.842405988999076, lon: 12.485275160413615 },
-  destination: { lat: 41.83132580378893,  lon: 12.467955552267968 },
+  origin:      { lat: 45.07251373016942,  lon: 7.657059739198934  },
+  destination: { lat: 45.062609036476736, lon: 7.6626132784813645 },
 };
 
 function timeToSec(t) {
@@ -664,6 +666,58 @@ async function importGTFS(db, url, agencyIds) {
   console.log(`\n[importGTFS total] ${ms(tTotal)}`);
 }
 
+async function syncToRemote(localDb) {
+  if (!REMOTE_URI) return;
+  const DAILY = ['daily_stops', 'daily_routes', 'daily_trips', 'daily_stop_times', 'daily_shapes'];
+  const BATCH = 50000;
+
+  console.log(`\n[sync-remote] connessione a remote...`);
+  const remoteClient = new MongoClient(REMOTE_URI);
+  await remoteClient.connect();
+  const remoteDb = remoteClient.db(localDb.databaseName);
+
+  for (const name of DAILY) {
+    const t = performance.now();
+    const total = await localDb.collection(name).countDocuments();
+    if (total === 0) { console.log(`  [${name}] vuota, skip`); continue; }
+
+    await remoteDb.collection(name).drop().catch(() => {});
+    let synced = 0;
+    const cursor = localDb.collection(name).find({}, { projection: { _id: 0 } });
+    let batch = [];
+    for await (const doc of cursor) {
+      batch.push(doc);
+      if (batch.length >= BATCH) {
+        await remoteDb.collection(name).insertMany(batch, { ordered: false });
+        synced += batch.length;
+        batch = [];
+        process.stdout.write(`\r  [${name}] ${synced.toLocaleString()}/${total.toLocaleString()}...`);
+      }
+    }
+    if (batch.length > 0) {
+      await remoteDb.collection(name).insertMany(batch, { ordered: false });
+      synced += batch.length;
+    }
+    console.log(`\r  [${name}] ${synced.toLocaleString()} doc — ${ms(t)}`);
+  }
+
+  // indici sul remote
+  const tIdx = performance.now();
+  await Promise.all([
+    remoteDb.collection('daily_stops').createIndex({ location: '2dsphere' }),
+    remoteDb.collection('daily_stops').createIndex({ stop_id: 1 }),
+    remoteDb.collection('daily_stop_times').createIndex({ stop_id: 1, departure_time: 1 }),
+    remoteDb.collection('daily_stop_times').createIndex({ trip_id: 1, stop_id: 1 }),
+    remoteDb.collection('daily_trips').createIndex({ trip_id: 1 }),
+    remoteDb.collection('daily_trips').createIndex({ route_id: 1 }),
+    remoteDb.collection('daily_routes').createIndex({ route_id: 1 }),
+  ]);
+  console.log(`[sync-remote] indici creati — ${ms(tIdx)}`);
+
+  await remoteClient.close();
+  console.log(`[sync-remote] completato`);
+}
+
 async function main() {
   const tTotal = performance.now();
 
@@ -675,6 +729,7 @@ async function main() {
     console.log('[--skip-import] uso dati già presenti nel DB\n');
   } else {
     await importGTFS(db, GTFS_URL, AGENCY_IDS);
+    await syncToRemote(db);
   }
 
   await findRoutesBetween(db, SEARCH_CONFIG);
