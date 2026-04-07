@@ -17,8 +17,9 @@ const MONGO_URI  = 'mongodb://localhost:27017';
 const REMOTE_URI = process.env.REMOTE_URI || '';
 
 const CITIES = {
-  Torino: { url: 'https://www.gtt.to.it/open_data/gtt_gtfs.zip',                           agencyIds: ['U']    },
-  Roma:   { url: 'https://romamobilita.it/sites/default/files/rome_static_gtfs.zip',       agencyIds: ['OP1'] },
+  Torino:  { url: 'https://www.gtt.to.it/open_data/gtt_gtfs.zip',                                                        agencyIds: ['U']    },
+  Roma:    { url: 'https://romamobilita.it/sites/default/files/rome_static_gtfs.zip',                                     agencyIds: ['OP1'] },
+  Firenze: { url: 'https://stg-regionetoscana.smartregion.toscana.it/mobility/autolinee-toscane/gtfs.zip',                agencyIds: ['UFI'] },
 };
 
 const EXCLUDE_FIELDS = {
@@ -351,12 +352,10 @@ async function main() {
 
   const SYNC = process.argv.includes('--sync');
 
-  if (SKIP_IMPORT) {
-    console.log('[--skip-import] nessuna operazione da eseguire\n');
-  } else {
+  if (!SKIP_IMPORT) {
     await importGTFS(db, url, agencyIds);
-    if (SYNC) await syncToRemote(db);
   }
+  if (SYNC) await syncToRemote(db);
 
   await client.close();
   console.log(`\n[total] ${ms(tTotal)}`);
