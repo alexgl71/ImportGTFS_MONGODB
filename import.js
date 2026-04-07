@@ -1,3 +1,11 @@
+// Utilizzo:
+//   node import.js <città>                          importa GTFS in locale
+//   node import.js <città> --sync                   importa + synca daily_* su Atlas
+//   node import.js <città> --skip-import            nessuna operazione
+//   node import.js <città> --skip-import --sync     synca dati già presenti su Atlas
+//
+// Città disponibili: Torino, Roma
+
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const axios = require('axios');
@@ -340,11 +348,13 @@ async function main() {
   await client.connect();
   const db = client.db(cityName);
 
+  const SYNC = process.argv.includes('--sync');
+
   if (SKIP_IMPORT) {
     console.log('[--skip-import] nessuna operazione da eseguire\n');
   } else {
     await importGTFS(db, url, agencyIds);
-    await syncToRemote(db);
+    if (SYNC) await syncToRemote(db);
   }
 
   await client.close();
