@@ -4,11 +4,13 @@ const axios = require('axios');
 const AdmZip = require('adm-zip');
 const { parse } = require('csv-parse/sync');
 
-const GTFS_URL   = 'https://www.gtt.to.it/open_data/gtt_gtfs.zip';
 const MONGO_URI  = 'mongodb://localhost:27017';
-const REMOTE_URI = process.env.REMOTE_URI || ''; // impostato in .env
-const DB_NAME    = 'Torino';
-const AGENCY_IDS = ['U'];
+const REMOTE_URI = process.env.REMOTE_URI || '';
+
+const CITIES = {
+  Torino: { url: 'https://www.gtt.to.it/open_data/gtt_gtfs.zip',                                    agencyIds: ['U']    },
+  Roma:   { url: 'https://romamobilita.it/sites/default/files/rome_static_gtfs.zip',                 agencyIds: ['OP1'] },
+};
 
 const EXCLUDE_FIELDS = {
   routes:     ['route_url', 'route_color', 'route_text_color'],
@@ -327,14 +329,21 @@ async function syncToRemote(localDb) {
 async function main() {
   const tTotal = performance.now();
 
+  const cityName = process.argv.find(a => CITIES[a]);
+  if (!cityName) {
+    console.error(`Città non specificata. Disponibili: ${Object.keys(CITIES).join(', ')}`);
+    process.exit(1);
+  }
+  const { url, agencyIds } = CITIES[cityName];
+
   const client = new MongoClient(MONGO_URI);
   await client.connect();
-  const db = client.db(DB_NAME);
+  const db = client.db(cityName);
 
   if (SKIP_IMPORT) {
     console.log('[--skip-import] nessuna operazione da eseguire\n');
   } else {
-    await importGTFS(db, GTFS_URL, AGENCY_IDS);
+    await importGTFS(db, url, agencyIds);
     await syncToRemote(db);
   }
 
