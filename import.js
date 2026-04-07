@@ -12,6 +12,7 @@ const { MongoClient } = require('mongodb');
 const axios = require('axios');
 const AdmZip = require('adm-zip');
 const { parse } = require('csv-parse/sync');
+const { parse: parseStream } = require('csv-parse');
 
 const MONGO_URI  = 'mongodb://localhost:27017';
 const REMOTE_URI = process.env.REMOTE_URI || '';
@@ -129,6 +130,42 @@ async function importCollection(db, name, records) {
   console.log(`  [${name}] ${records.length.toLocaleString()} records — ${ms(t)}`);
 }
 
+const STREAM_FILES = new Set(['stop_times', 'shapes']);
+
+async function importCollectionStreamed(db, name, buffer, excludeFields) {
+  const t = performance.now();
+  let buf = buffer;
+  if (buf[0] === 0xEF && buf[1] === 0xBB && buf[2] === 0xBF) buf = buf.slice(3);
+
+  const parser = parseStream(buf, {
+    columns: true, skip_empty_lines: true, trim: true,
+    relax_quotes: true, relax_column_count: true,
+  });
+
+  const collection = db.collection(name);
+  const BATCH = 5000;
+  let batch = [];
+  let total = 0;
+
+  process.stdout.write(`  [${name}] streaming...`);
+  for await (const record of parser) {
+    let r = sanitizeRecord(record);
+    if (excludeFields) for (const f of excludeFields) delete r[f];
+    batch.push(r);
+    if (batch.length >= BATCH) {
+      await collection.insertMany(batch, { ordered: false });
+      total += batch.length;
+      batch = [];
+    }
+  }
+  if (batch.length > 0) {
+    await collection.insertMany(batch, { ordered: false });
+    total += batch.length;
+  }
+  console.log(` ${total.toLocaleString()} records — ${ms(t)}`);
+  return total;
+}
+
 const SKIP_IMPORT = process.argv.includes('--skip-import');
 
 async function importGTFS(db, url, agencyIds) {
@@ -150,23 +187,27 @@ async function importGTFS(db, url, agencyIds) {
       continue;
     }
     try {
-      const tParse = performance.now();
-      let records = parseCsv(files[filename]);
-      if (EXCLUDE_FIELDS[name]) records = dropFields(records, EXCLUDE_FIELDS[name]);
-      if (name === 'stops') records = transformStops(records);
-      const parseTime = ms(tParse);
-      process.stdout.write(`  [${name}] parsed ${records.length.toLocaleString()} records in ${parseTime} — inserting...`);
-      const tIns = performance.now();
-      const collection = db.collection(name);
-      const BATCH = 5000;
-      for (let i = 0; i < records.length; i += BATCH) {
-        await collection.insertMany(records.slice(i, i + BATCH), { ordered: false });
-      }
-      if (name === 'stops') {
-        await collection.createIndex({ location: '2dsphere' });
-        console.log(` done in ${ms(tIns)} [2dsphere index created]`);
+      if (STREAM_FILES.has(name)) {
+        await importCollectionStreamed(db, name, files[filename], EXCLUDE_FIELDS[name]);
       } else {
-        console.log(` done in ${ms(tIns)}`);
+        const tParse = performance.now();
+        let records = parseCsv(files[filename]);
+        if (EXCLUDE_FIELDS[name]) records = dropFields(records, EXCLUDE_FIELDS[name]);
+        if (name === 'stops') records = transformStops(records);
+        const parseTime = ms(tParse);
+        process.stdout.write(`  [${name}] parsed ${records.length.toLocaleString()} records in ${parseTime} — inserting...`);
+        const tIns = performance.now();
+        const collection = db.collection(name);
+        const BATCH = 5000;
+        for (let i = 0; i < records.length; i += BATCH) {
+          await collection.insertMany(records.slice(i, i + BATCH), { ordered: false });
+        }
+        if (name === 'stops') {
+          await collection.createIndex({ location: '2dsphere' });
+          console.log(` done in ${ms(tIns)} [2dsphere index created]`);
+        } else {
+          console.log(` done in ${ms(tIns)}`);
+        }
       }
     } catch (err) {
       console.error(`\n  [${name}] ERROR — ${err.message}`);
