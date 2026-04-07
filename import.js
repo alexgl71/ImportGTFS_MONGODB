@@ -5,6 +5,7 @@
 //   node import.js <città> --skip-import --sync     synca dati già presenti su Atlas
 //
 // Città disponibili: Torino, Roma
+// Per il feed realtime: node realtime.js <città>
 
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
@@ -16,8 +17,8 @@ const MONGO_URI  = 'mongodb://localhost:27017';
 const REMOTE_URI = process.env.REMOTE_URI || '';
 
 const CITIES = {
-  Torino: { url: 'https://www.gtt.to.it/open_data/gtt_gtfs.zip',                                    agencyIds: ['U']    },
-  Roma:   { url: 'https://romamobilita.it/sites/default/files/rome_static_gtfs.zip',                 agencyIds: ['OP1'] },
+  Torino: { url: 'https://www.gtt.to.it/open_data/gtt_gtfs.zip',                           agencyIds: ['U']    },
+  Roma:   { url: 'https://romamobilita.it/sites/default/files/rome_static_gtfs.zip',       agencyIds: ['OP1'] },
 };
 
 const EXCLUDE_FIELDS = {
