@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --max-old-space-size=8192 import.js"
+    "start": "node --max-old-space-size=8192 import.js",
+    "import": "node --max-old-space-size=8192 import.js"
   },
   "keywords": [],
   "author": "",

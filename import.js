@@ -13,6 +13,9 @@ const axios = require('axios');
 const AdmZip = require('adm-zip');
 const { parse } = require('csv-parse/sync');
 const { parse: parseStream } = require('csv-parse');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 
 const MONGO_URI  = 'mongodb://localhost:27017';
 const REMOTE_URI = process.env.REMOTE_URI || '';
@@ -60,12 +63,22 @@ function extractFiles(zipBuffer) {
   const t = performance.now();
   const zip = new AdmZip(zipBuffer);
   const entries = {};
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'gtfs-'));
+
   for (const entry of zip.getEntries()) {
     const name = entry.entryName.replace(/^.*\//, '');
-    entries[name] = entry.getData();
+    const baseName = name.replace('.txt', '');
+    if (STREAM_FILES.has(baseName)) {
+      // File grandi: scrivi su disco per non saturare l'heap
+      const tmpPath = path.join(tmpDir, name);
+      fs.writeFileSync(tmpPath, entry.getData());
+      entries[name] = { tmpPath };
+    } else {
+      entries[name] = entry.getData();
+    }
   }
   console.log(`[extract] ${Object.keys(entries).length} files — ${ms(t)}\n`);
-  return entries;
+  return { files: entries, tmpDir };
 }
 
 function dropFields(records, fields) {
@@ -133,15 +146,24 @@ async function importCollection(db, name, records) {
 
 const STREAM_FILES = new Set(['stop_times', 'shapes']);
 
-async function importCollectionStreamed(db, name, buffer, excludeFields) {
+async function importCollectionStreamed(db, name, bufferOrPath, excludeFields) {
   const t = performance.now();
-  let buf = buffer;
-  if (buf[0] === 0xEF && buf[1] === 0xBB && buf[2] === 0xBF) buf = buf.slice(3);
 
-  const parser = parseStream(buf, {
+  const csvOpts = {
     columns: true, skip_empty_lines: true, trim: true,
-    relax_quotes: true, relax_column_count: true,
-  });
+    relax_quotes: true, relax_column_count: true, bom: true,
+  };
+
+  let parser;
+  if (bufferOrPath && typeof bufferOrPath === 'object' && bufferOrPath.tmpPath) {
+    // File su disco: pipe il ReadStream nel parser (nessun buffer in heap)
+    parser = parseStream(csvOpts);
+    fs.createReadStream(bufferOrPath.tmpPath).pipe(parser);
+  } else {
+    let buf = bufferOrPath;
+    if (buf[0] === 0xEF && buf[1] === 0xBB && buf[2] === 0xBF) buf = buf.slice(3);
+    parser = parseStream(buf, csvOpts);
+  }
 
   const collection = db.collection(name);
   const BATCH = 5000;
@@ -172,8 +194,8 @@ const SKIP_IMPORT = process.argv.includes('--skip-import');
 async function importGTFS(db, url, agencyIds) {
   const tTotal = performance.now();
 
-  const zipBuffer = await downloadZip(url);
-  const files = extractFiles(zipBuffer);
+  // zipBuffer liberato subito dopo l'estrazione per non tenerlo in heap
+  const { files, tmpDir } = await downloadZip(url).then(extractFiles);
 
   const tDrop = performance.now();
   await db.dropDatabase();
@@ -213,7 +235,12 @@ async function importGTFS(db, url, agencyIds) {
     } catch (err) {
       console.error(`\n  [${name}] ERROR — ${err.message}`);
     }
+    // libera il buffer subito dopo l'import per evitare OOM su feed grandi
+    files[filename] = null;
   }
+
+  // rimuovi file temporanei su disco
+  fs.rmSync(tmpDir, { recursive: true, force: true });
   console.log(`\n[import total] ${ms(tImport)}`);
 
   // --- daily_trips ---
