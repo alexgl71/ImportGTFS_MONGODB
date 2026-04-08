@@ -405,8 +405,32 @@ async function syncToRemote(localDb) {
   console.log(`[sync-remote] completato`);
 }
 
+async function logToAtlas(cityName, startedAt, durationMs, status, counts, errorMsg) {
+  if (!REMOTE_URI) return;
+  try {
+    const remoteClient = new MongoClient(REMOTE_URI);
+    await remoteClient.connect();
+    const logCol = remoteClient.db('gtfs_system').collection('import_log');
+    await logCol.insertOne({
+      city:        cityName,
+      date:        new Date().toISOString().slice(0, 10),
+      startedAt,
+      completedAt: new Date(),
+      durationMs,
+      status,
+      counts:      counts || {},
+      error:       errorMsg || null,
+    });
+    await remoteClient.close();
+    console.log(`[import_log] scritto su Atlas (${status})`);
+  } catch (e) {
+    console.error(`[import_log] errore scrittura Atlas: ${e.message}`);
+  }
+}
+
 async function main() {
   const tTotal = performance.now();
+  const startedAt = new Date();
 
   const cityName = process.argv.find(a => CITIES[a]);
   if (!cityName) {
@@ -421,13 +445,29 @@ async function main() {
 
   const SYNC = process.argv.includes('--sync');
 
-  if (!SKIP_IMPORT) {
-    await importGTFS(db, url, agencyIds);
-  }
-  if (SYNC) await syncToRemote(db);
+  try {
+    if (!SKIP_IMPORT) {
+      await importGTFS(db, url, agencyIds);
+    }
+    if (SYNC) await syncToRemote(db);
 
-  await client.close();
-  console.log(`\n[total] ${ms(tTotal)}`);
+    // raccogli conteggi dalle daily collections
+    const counts = {};
+    for (const name of ['daily_stops', 'daily_routes', 'daily_trips', 'daily_stop_times', 'daily_shapes']) {
+      counts[name] = await db.collection(name).countDocuments().catch(() => 0);
+    }
+
+    const durationMs = Math.round(performance.now() - tTotal);
+    console.log(`\n[total] ${durationMs} ms`);
+    await logToAtlas(cityName, startedAt, durationMs, 'success', counts, null);
+  } catch (err) {
+    const durationMs = Math.round(performance.now() - tTotal);
+    console.error('Fatal:', err.message);
+    await logToAtlas(cityName, startedAt, durationMs, 'error', null, err.message);
+    process.exit(1);
+  } finally {
+    await client.close();
+  }
 }
 
 main().catch((err) => {
