@@ -4,7 +4,7 @@
 //   node import.js <città> --skip-import            nessuna operazione
 //   node import.js <città> --skip-import --sync     synca dati già presenti su Atlas
 //
-// Città disponibili: Torino, Roma
+// Città disponibili: Torino, Roma, Firenze, Bari
 // Per il feed realtime: node realtime.js <città>
 
 require('dotenv').config();
@@ -21,6 +21,7 @@ const CITIES = {
   Torino:  { url: 'https://www.gtt.to.it/open_data/gtt_gtfs.zip',                                                        agencyIds: ['U']    },
   Roma:    { url: 'https://romamobilita.it/sites/default/files/rome_static_gtfs.zip',                                     agencyIds: ['OP1'] },
   Firenze: { url: 'https://stg-regionetoscana.smartregion.toscana.it/mobility/autolinee-toscane/gtfs.zip',                agencyIds: ['UFI'] },
+  Bari:    { url: 'https://www.amtabservizio.it/gtfs/google_transit.zip',                                                  agencyIds: ['Amtab  S.p.A'] },
 };
 
 const EXCLUDE_FIELDS = {
