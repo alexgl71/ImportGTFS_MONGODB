@@ -339,8 +339,10 @@ async function importGTFS(db, url, agencyIds) {
     db.collection('daily_stop_times').createIndex({ trip_id: 1, stop_id: 1 }),
     db.collection('daily_trips').createIndex({ trip_id: 1 }),
     db.collection('daily_trips').createIndex({ route_id: 1 }),
+    db.collection('daily_trips').createIndex({ route_id: 1, trip_headsign: 1 }),
     db.collection('daily_stops').createIndex({ stop_id: 1 }),
     db.collection('daily_routes').createIndex({ route_id: 1 }),
+    db.collection('daily_shapes').createIndex({ shape_id: 1 }),
   ]);
   console.log(`[indexes] creati — ${ms(tIdx)}`);
 
@@ -397,7 +399,9 @@ async function syncToRemote(localDb) {
     remoteDb.collection('daily_stop_times').createIndex({ trip_id: 1, stop_id: 1 }),
     remoteDb.collection('daily_trips').createIndex({ trip_id: 1 }),
     remoteDb.collection('daily_trips').createIndex({ route_id: 1 }),
+    remoteDb.collection('daily_trips').createIndex({ route_id: 1, trip_headsign: 1 }),
     remoteDb.collection('daily_routes').createIndex({ route_id: 1 }),
+    remoteDb.collection('daily_shapes').createIndex({ shape_id: 1 }),
   ]);
   console.log(`[sync-remote] indici creati — ${ms(tIdx)}`);
 
