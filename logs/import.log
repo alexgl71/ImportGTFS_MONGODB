@@ -1,0 +1,629 @@
+==============================
+Import giornaliero avviato — 2026-04-09 07:00:04
+==============================
+
+=== Torino — 2026-04-09 07:00:05 ===
+◇ injected env (2) from .env // tip: ⌘ enable debugging { debug: true }
+[download] https://www.gtt.to.it/open_data/gtt_gtfs.zip
+[download] 19.20 MB — 1095 ms
+[extract] 16 files — 570 ms
+
+[drop DB] Torino dropped — 16 ms
+[mongo] database: Torino | agencies: U
+
+  [stops] parsed 7,071 records in 64 ms — inserting... done in 198 ms [2dsphere index created]
+  [routes] parsed 217 records in 12 ms — inserting... done in 24 ms
+  [trips] parsed 58,967 records in 304 ms — inserting... done in 282 ms
+  [stop_times] streaming... 1,752,555 records — 16771 ms
+  [calendar_dates] parsed 53,205 records in 79 ms — inserting... done in 175 ms
+  [shapes] streaming... 209,327 records — 1241 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 19187 ms
+
+[daily_trips] data: 20260409
+[daily_trips] service_id attivi: 261
+[daily_trips] 13,781 trips inseriti — 189 ms
+[daily_routes] 128 routes inserite (agencies: U) — 30 ms
+[daily_trips] dopo filtro agency: 11,976 trips
+[daily_shapes] 41,088 punti inseriti — 328 ms
+[daily_stop_times] 348,521 records inseriti — 3534 ms
+[daily_stops] 3,692 fermate inserite [2dsphere index created] — 242 ms
+[daily_stops.routes] 3,692 fermate aggiornate — 8565 ms
+[daily_stops.closeStops] 3,692 fermate elaborate — 6428 ms
+[indexes] creati — 411 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 4 ms
+
+[importGTFS total] 40653 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 3,692 doc — 416 ms
+  [daily_routes] 128 doc — 87 ms
+  [daily_trips] 11,976 doc — 1620 ms
+  [daily_stop_times] 50,000/348,521...  [daily_stop_times] 100,000/348,521...  [daily_stop_times] 150,000/348,521...  [daily_stop_times] 200,000/348,521...  [daily_stop_times] 250,000/348,521...  [daily_stop_times] 300,000/348,521...  [daily_stop_times] 348,521 doc — 18893 ms
+  [daily_shapes] 41,088 doc — 2815 ms
+[sync-remote] indici creati — 4287 ms
+[sync-remote] completato
+
+[total] 69346 ms
+[import_log] scritto su Atlas (success)
+=== Torino completata — 2026-04-09 07:01:17 ===
+
+=== Roma — 2026-04-09 07:01:17 ===
+◇ injected env (2) from .env // tip: ⌘ override existing { override: true }
+[download] https://romamobilita.it/sites/default/files/rome_static_gtfs.zip
+[download] 48.83 MB — 9069 ms
+[extract] 7 files — 1394 ms
+
+[drop DB] Roma dropped — 7 ms
+[mongo] database: Roma | agencies: OP1
+
+  [stops] parsed 8,343 records in 45 ms — inserting... done in 181 ms [2dsphere index created]
+  [routes] parsed 434 records in 9 ms — inserting... done in 23 ms
+  [trips] parsed 184,852 records in 801 ms — inserting... done in 913 ms
+  [stop_times] streaming... 5,616,097 records — 49332 ms
+  [calendar_dates] parsed 3,946 records in 12 ms — inserting... done in 44 ms
+  [shapes] streaming... 563,517 records — 3498 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 54891 ms
+
+[daily_trips] data: 20260409
+[daily_trips] service_id attivi: 638
+[daily_trips] 38,000 trips inseriti — 334 ms
+[daily_routes] 310 routes inserite (agencies: OP1) — 35 ms
+[daily_trips] dopo filtro agency: 30,418 trips
+[daily_shapes] 319,633 punti inseriti — 1843 ms
+[daily_stop_times] 879,977 records inseriti — 16738 ms
+[daily_stops] 6,543 fermate inserite [2dsphere index created] — 482 ms
+[daily_stops.routes] 6,543 fermate aggiornate — 37608 ms
+[daily_stops.closeStops] 6,543 fermate elaborate — 12386 ms
+[indexes] creati — 895 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 3 ms
+
+[importGTFS total] 135729 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 6,543 doc — 625 ms
+  [daily_routes] 310 doc — 87 ms
+  [daily_trips] 30,418 doc — 1419 ms
+  [daily_stop_times] 50,000/879,977...  [daily_stop_times] 100,000/879,977...  [daily_stop_times] 150,000/879,977...  [daily_stop_times] 200,000/879,977...  [daily_stop_times] 250,000/879,977...  [daily_stop_times] 300,000/879,977...  [daily_stop_times] 350,000/879,977...  [daily_stop_times] 400,000/879,977...  [daily_stop_times] 450,000/879,977...  [daily_stop_times] 500,000/879,977...  [daily_stop_times] 550,000/879,977...  [daily_stop_times] 600,000/879,977...  [daily_stop_times] 650,000/879,977...  [daily_stop_times] 700,000/879,977...  [daily_stop_times] 750,000/879,977...  [daily_stop_times] 800,000/879,977...  [daily_stop_times] 850,000/879,977...  [daily_stop_times] 879,977 doc — 56727 ms
+  [daily_shapes] 50,000/319,633...  [daily_shapes] 100,000/319,633...  [daily_shapes] 150,000/319,633...  [daily_shapes] 200,000/319,633...  [daily_shapes] 250,000/319,633...  [daily_shapes] 300,000/319,633...  [daily_shapes] 319,633 doc — 21709 ms
+[sync-remote] indici creati — 13526 ms
+[sync-remote] completato
+
+[total] 230474 ms
+[import_log] scritto su Atlas (success)
+=== Roma completata — 2026-04-09 07:05:08 ===
+
+=== Firenze — 2026-04-09 07:05:08 ===
+◇ injected env (2) from .env // tip: ⌘ suppress logs { quiet: true }
+[download] https://stg-regionetoscana.smartregion.toscana.it/mobility/autolinee-toscane/gtfs.zip
+[download] 181.46 MB — 7844 ms
+[extract] 10 files — 4193 ms
+
+[drop DB] Firenze dropped — 28 ms
+[mongo] database: Firenze | agencies: UFI
+
+  [stops] parsed 35,000 records in 261 ms — inserting... done in 390 ms [2dsphere index created]
+  [routes] parsed 981 records in 15 ms — inserting... done in 27 ms
+  [trips] parsed 235,769 records in 1005 ms — inserting... done in 922 ms
+  [stop_times] streaming... 6,246,655 records — 56559 ms
+  [calendar_dates] parsed 12,342 records in 22 ms — inserting... done in 83 ms
+  [shapes] streaming... 12,661,774 records — 75122 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 134478 ms
+
+[daily_trips] data: 20260409
+[daily_trips] service_id attivi: 775
+[daily_trips] 30,415 trips inseriti — 439 ms
+[daily_routes] 91 routes inserite (agencies: UFI) — 35 ms
+[daily_trips] dopo filtro agency: 8,346 trips
+[daily_shapes] 287,720 punti inseriti — 5864 ms
+[daily_stop_times] 204,620 records inseriti — 6262 ms
+[daily_stops] 2,457 fermate inserite [2dsphere index created] — 201 ms
+[daily_stops.routes] 2,457 fermate aggiornate — 831 ms
+[daily_stops.closeStops] 2,457 fermate elaborate — 3928 ms
+[indexes] creati — 313 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 5 ms
+
+[importGTFS total] 164503 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 2,457 doc — 361 ms
+  [daily_routes] 91 doc — 81 ms
+  [daily_trips] 8,346 doc — 345 ms
+  [daily_stop_times] 50,000/204,620...  [daily_stop_times] 100,000/204,620...  [daily_stop_times] 150,000/204,620...  [daily_stop_times] 200,000/204,620...  [daily_stop_times] 204,620 doc — 12584 ms
+  [daily_shapes] 50,000/287,720...  [daily_shapes] 100,000/287,720...  [daily_shapes] 150,000/287,720...  [daily_shapes] 200,000/287,720...  [daily_shapes] 250,000/287,720...  [daily_shapes] 287,720 doc — 20282 ms
+[sync-remote] indici creati — 2614 ms
+[sync-remote] completato
+
+[total] 201367 ms
+[import_log] scritto su Atlas (success)
+=== Firenze completata — 2026-04-09 07:08:31 ===
+
+=== Bari — 2026-04-09 07:08:31 ===
+◇ injected env (2) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[download] https://www.amtabservizio.it/gtfs/google_transit.zip
+[download] 3.26 MB — 328 ms
+[extract] 10 files — 113 ms
+
+[drop DB] Bari dropped — 4 ms
+[mongo] database: Bari | agencies: Amtab  S.p.A
+
+  [stops] parsed 1,114 records in 13 ms — inserting... done in 90 ms [2dsphere index created]
+  [routes] parsed 66 records in 3 ms — inserting... done in 21 ms
+  [trips] parsed 4,818 records in 35 ms — inserting... done in 70 ms
+  [stop_times] streaming... 161,178 records — 1717 ms
+  [calendar_dates] parsed 730 records in 3 ms — inserting... done in 37 ms
+  [shapes] streaming... 105,738 records — 832 ms
+  [frequencies] not in feed, skipped
+  [transfers] parsed 0 records in 0 ms — inserting... done in 0 ms
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 2834 ms
+
+[daily_trips] data: 20260409
+[daily_trips] service_id attivi: 2
+[daily_trips] 3,155 trips inseriti — 59 ms
+[daily_routes] 66 routes inserite (agencies: Amtab  S.p.A) — 28 ms
+[daily_trips] dopo filtro agency: 3,155 trips
+[daily_shapes] 104,768 punti inseriti — 698 ms
+[daily_stop_times] 106,284 records inseriti — 641 ms
+[daily_stops] 1,114 fermate inserite [2dsphere index created] — 108 ms
+[daily_stops.routes] 1,114 fermate aggiornate — 261 ms
+[daily_stops.closeStops] 1,114 fermate elaborate — 2022 ms
+[indexes] creati — 201 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 3 ms
+
+[importGTFS total] 7309 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 1,114 doc — 429 ms
+  [daily_routes] 66 doc — 88 ms
+  [daily_trips] 3,155 doc — 357 ms
+  [daily_stop_times] 50,000/106,284...  [daily_stop_times] 100,000/106,284...  [daily_stop_times] 106,284 doc — 8640 ms
+  [daily_shapes] 50,000/104,768...  [daily_shapes] 100,000/104,768...  [daily_shapes] 104,768 doc — 6422 ms
+[sync-remote] indici creati — 1772 ms
+[sync-remote] completato
+
+[total] 25829 ms
+[import_log] scritto su Atlas (success)
+=== Bari completata — 2026-04-09 07:08:57 ===
+
+==============================
+Import giornaliero completato — 2026-04-09 07:08:57
+==============================
+==============================
+Import giornaliero avviato — 2026-04-10 07:00:02
+==============================
+
+=== Torino — 2026-04-10 07:00:03 ===
+◇ injected env (2) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[download] https://www.gtt.to.it/open_data/gtt_gtfs.zip
+[download] 19.11 MB — 1169 ms
+[extract] 16 files — 568 ms
+
+[drop DB] Torino dropped — 10 ms
+[mongo] database: Torino | agencies: U
+
+  [stops] parsed 7,072 records in 64 ms — inserting... done in 166 ms [2dsphere index created]
+  [routes] parsed 217 records in 10 ms — inserting... done in 23 ms
+  [trips] parsed 58,744 records in 305 ms — inserting... done in 295 ms
+  [stop_times] streaming... 1,743,378 records — 16882 ms
+  [calendar_dates] parsed 52,947 records in 72 ms — inserting... done in 195 ms
+  [shapes] streaming... 209,454 records — 1190 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 19241 ms
+
+[daily_trips] data: 20260410
+[daily_trips] service_id attivi: 264
+[daily_trips] 13,854 trips inseriti — 148 ms
+[daily_routes] 137 routes inserite (agencies: U) — 28 ms
+[daily_trips] dopo filtro agency: 12,061 trips
+[daily_shapes] 41,660 punti inseriti — 313 ms
+[daily_stop_times] 350,079 records inseriti — 3636 ms
+[daily_stops] 3,694 fermate inserite [2dsphere index created] — 248 ms
+[daily_stops.routes] 3,694 fermate aggiornate — 8616 ms
+[daily_stops.closeStops] 3,694 fermate elaborate — 6191 ms
+[indexes] creati — 417 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 3 ms
+
+[importGTFS total] 40611 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 3,694 doc — 417 ms
+  [daily_routes] 137 doc — 80 ms
+  [daily_trips] 12,061 doc — 592 ms
+  [daily_stop_times] 50,000/350,079...  [daily_stop_times] 100,000/350,079...  [daily_stop_times] 150,000/350,079...  [daily_stop_times] 200,000/350,079...  [daily_stop_times] 250,000/350,079...  [daily_stop_times] 300,000/350,079...  [daily_stop_times] 350,000/350,079...  [daily_stop_times] 350,079 doc — 20943 ms
+  [daily_shapes] 41,660 doc — 2408 ms
+[sync-remote] indici creati — 4411 ms
+[sync-remote] completato
+
+[total] 69961 ms
+[import_log] scritto su Atlas (success)
+=== Torino completata — 2026-04-10 07:01:13 ===
+
+=== Roma — 2026-04-10 07:01:13 ===
+◇ injected env (2) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[download] https://romamobilita.it/sites/default/files/rome_static_gtfs.zip
+[download] 49.04 MB — 8044 ms
+[extract] 7 files — 1406 ms
+
+[drop DB] Roma dropped — 7 ms
+[mongo] database: Roma | agencies: OP1
+
+  [stops] parsed 8,345 records in 46 ms — inserting... done in 176 ms [2dsphere index created]
+  [routes] parsed 434 records in 9 ms — inserting... done in 23 ms
+  [trips] parsed 185,083 records in 790 ms — inserting... done in 864 ms
+  [stop_times] streaming... 5,634,059 records — 49200 ms
+  [calendar_dates] parsed 3,462 records in 10 ms — inserting... done in 49 ms
+  [shapes] streaming... 569,907 records — 3498 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 54698 ms
+
+[daily_trips] data: 20260410
+[daily_trips] service_id attivi: 660
+[daily_trips] 38,323 trips inseriti — 350 ms
+[daily_routes] 312 routes inserite (agencies: OP1) — 37 ms
+[daily_trips] dopo filtro agency: 30,741 trips
+[daily_shapes] 324,710 punti inseriti — 1885 ms
+[daily_stop_times] 882,852 records inseriti — 16981 ms
+[daily_stops] 6,565 fermate inserite [2dsphere index created] — 485 ms
+[daily_stops.routes] 6,565 fermate aggiornate — 38263 ms
+[daily_stops.closeStops] 6,565 fermate elaborate — 13193 ms
+[indexes] creati — 904 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 4 ms
+
+[importGTFS total] 136303 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 6,565 doc — 665 ms
+  [daily_routes] 312 doc — 75 ms
+  [daily_trips] 30,741 doc — 1306 ms
+  [daily_stop_times] 50,000/882,852...  [daily_stop_times] 100,000/882,852...  [daily_stop_times] 150,000/882,852...  [daily_stop_times] 200,000/882,852...  [daily_stop_times] 250,000/882,852...  [daily_stop_times] 300,000/882,852...  [daily_stop_times] 350,000/882,852...  [daily_stop_times] 400,000/882,852...  [daily_stop_times] 450,000/882,852...  [daily_stop_times] 500,000/882,852...  [daily_stop_times] 550,000/882,852...  [daily_stop_times] 600,000/882,852...  [daily_stop_times] 650,000/882,852...  [daily_stop_times] 700,000/882,852...  [daily_stop_times] 750,000/882,852...  [daily_stop_times] 800,000/882,852...  [daily_stop_times] 850,000/882,852...  [daily_stop_times] 882,852 doc — 56357 ms
+  [daily_shapes] 50,000/324,710...  [daily_shapes] 100,000/324,710...  [daily_shapes] 150,000/324,710...  [daily_shapes] 200,000/324,710...  [daily_shapes] 250,000/324,710...  [daily_shapes] 300,000/324,710...  [daily_shapes] 324,710 doc — 20287 ms
+[sync-remote] indici creati — 11697 ms
+[sync-remote] completato
+
+[total] 227341 ms
+[import_log] scritto su Atlas (success)
+=== Roma completata — 2026-04-10 07:05:01 ===
+
+=== Firenze — 2026-04-10 07:05:01 ===
+◇ injected env (2) from .env // tip: ⌘ override existing { override: true }
+[download] https://stg-regionetoscana.smartregion.toscana.it/mobility/autolinee-toscane/gtfs.zip
+[download] 181.66 MB — 7492 ms
+[extract] 10 files — 4120 ms
+
+[drop DB] Firenze dropped — 12 ms
+[mongo] database: Firenze | agencies: UFI
+
+  [stops] parsed 35,007 records in 211 ms — inserting... done in 405 ms [2dsphere index created]
+  [routes] parsed 981 records in 15 ms — inserting... done in 28 ms
+  [trips] parsed 236,882 records in 1001 ms — inserting... done in 904 ms
+  [stop_times] streaming... 6,284,547 records — 54575 ms
+  [calendar_dates] parsed 12,031 records in 21 ms — inserting... done in 78 ms
+  [shapes] streaming... 12,667,981 records — 75225 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 132532 ms
+
+[daily_trips] data: 20260410
+[daily_trips] service_id attivi: 744
+[daily_trips] 29,609 trips inseriti — 391 ms
+[daily_routes] 89 routes inserite (agencies: UFI) — 46 ms
+[daily_trips] dopo filtro agency: 7,486 trips
+[daily_shapes] 287,049 punti inseriti — 5462 ms
+[daily_stop_times] 186,097 records inseriti — 6397 ms
+[daily_stops] 2,396 fermate inserite [2dsphere index created] — 177 ms
+[daily_stops.routes] 2,396 fermate aggiornate — 793 ms
+[daily_stops.closeStops] 2,396 fermate elaborate — 4815 ms
+[indexes] creati — 265 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 4 ms
+
+[importGTFS total] 162596 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 2,396 doc — 374 ms
+  [daily_routes] 89 doc — 89 ms
+  [daily_trips] 7,486 doc — 633 ms
+  [daily_stop_times] 50,000/186,097...  [daily_stop_times] 100,000/186,097...  [daily_stop_times] 150,000/186,097...  [daily_stop_times] 186,097 doc — 11678 ms
+  [daily_shapes] 50,000/287,049...  [daily_shapes] 100,000/287,049...  [daily_shapes] 150,000/287,049...  [daily_shapes] 200,000/287,049...  [daily_shapes] 250,000/287,049...  [daily_shapes] 287,049 doc — 17709 ms
+[sync-remote] indici creati — 2919 ms
+[sync-remote] completato
+
+[total] 196589 ms
+[import_log] scritto su Atlas (success)
+=== Firenze completata — 2026-04-10 07:08:19 ===
+
+=== Bari — 2026-04-10 07:08:19 ===
+◇ injected env (2) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[download] https://www.amtabservizio.it/gtfs/google_transit.zip
+[download] 3.26 MB — 889 ms
+[extract] 10 files — 124 ms
+
+[drop DB] Bari dropped — 4 ms
+[mongo] database: Bari | agencies: Amtab  S.p.A
+
+  [stops] parsed 1,114 records in 14 ms — inserting... done in 97 ms [2dsphere index created]
+  [routes] parsed 66 records in 3 ms — inserting... done in 22 ms
+  [trips] parsed 4,818 records in 36 ms — inserting... done in 68 ms
+  [stop_times] streaming... 161,178 records — 1702 ms
+  [calendar_dates] parsed 730 records in 4 ms — inserting... done in 30 ms
+  [shapes] streaming... 105,738 records — 829 ms
+  [frequencies] not in feed, skipped
+  [transfers] parsed 0 records in 0 ms — inserting... done in 0 ms
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 2820 ms
+
+[daily_trips] data: 20260410
+[daily_trips] service_id attivi: 2
+[daily_trips] 3,155 trips inseriti — 62 ms
+[daily_routes] 66 routes inserite (agencies: Amtab  S.p.A) — 32 ms
+[daily_trips] dopo filtro agency: 3,155 trips
+[daily_shapes] 104,768 punti inseriti — 693 ms
+[daily_stop_times] 106,284 records inseriti — 612 ms
+[daily_stops] 1,114 fermate inserite [2dsphere index created] — 97 ms
+[daily_stops.routes] 1,114 fermate aggiornate — 249 ms
+[daily_stops.closeStops] 1,114 fermate elaborate — 2198 ms
+[indexes] creati — 166 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 3 ms
+
+[importGTFS total] 7957 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 1,114 doc — 401 ms
+  [daily_routes] 66 doc — 82 ms
+  [daily_trips] 3,155 doc — 249 ms
+  [daily_stop_times] 50,000/106,284...  [daily_stop_times] 100,000/106,284...  [daily_stop_times] 106,284 doc — 6604 ms
+  [daily_shapes] 50,000/104,768...  [daily_shapes] 100,000/104,768...  [daily_shapes] 104,768 doc — 7840 ms
+[sync-remote] indici creati — 2135 ms
+[sync-remote] completato
+
+[total] 28409 ms
+[import_log] scritto su Atlas (success)
+=== Bari completata — 2026-04-10 07:08:48 ===
+
+==============================
+Import giornaliero completato — 2026-04-10 07:08:48
+==============================
+==============================
+Import giornaliero avviato — 2026-04-11 07:00:01
+==============================
+
+=== Torino — 2026-04-11 07:00:02 ===
+◇ injected env (2) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[download] https://www.gtt.to.it/open_data/gtt_gtfs.zip
+[download] 19.07 MB — 1432 ms
+[extract] 16 files — 566 ms
+
+[drop DB] Torino dropped — 21 ms
+[mongo] database: Torino | agencies: U
+
+  [stops] parsed 7,076 records in 65 ms — inserting... done in 190 ms [2dsphere index created]
+  [routes] parsed 217 records in 12 ms — inserting... done in 26 ms
+  [trips] parsed 58,588 records in 303 ms — inserting... done in 279 ms
+  [stop_times] streaming... 1,739,385 records — 16763 ms
+  [calendar_dates] parsed 52,686 records in 72 ms — inserting... done in 213 ms
+  [shapes] streaming... 209,591 records — 1211 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 19153 ms
+
+[daily_trips] data: 20260411
+[daily_trips] service_id attivi: 196
+[daily_trips] 10,946 trips inseriti — 139 ms
+[daily_routes] 127 routes inserite (agencies: U) — 27 ms
+[daily_trips] dopo filtro agency: 10,054 trips
+[daily_shapes] 32,104 punti inseriti — 260 ms
+[daily_stop_times] 292,525 records inseriti — 3105 ms
+[daily_stops] 3,605 fermate inserite [2dsphere index created] — 224 ms
+[daily_stops.routes] 3,605 fermate aggiornate — 7134 ms
+[daily_stops.closeStops] 3,605 fermate elaborate — 7571 ms
+[indexes] creati — 354 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 4 ms
+
+[importGTFS total] 40036 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 3,605 doc — 433 ms
+  [daily_routes] 127 doc — 75 ms
+  [daily_trips] 10,054 doc — 765 ms
+  [daily_stop_times] 50,000/292,525...  [daily_stop_times] 100,000/292,525...  [daily_stop_times] 150,000/292,525...  [daily_stop_times] 200,000/292,525...  [daily_stop_times] 250,000/292,525...  [daily_stop_times] 292,525 doc — 17823 ms
+  [daily_shapes] 32,104 doc — 2061 ms
+[sync-remote] indici creati — 5358 ms
+[sync-remote] completato
+
+[total] 67246 ms
+[import_log] scritto su Atlas (success)
+=== Torino completata — 2026-04-11 07:01:10 ===
+
+=== Roma — 2026-04-11 07:01:10 ===
+◇ injected env (2) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[download] https://romamobilita.it/sites/default/files/rome_static_gtfs.zip
+[download] 48.54 MB — 8894 ms
+[extract] 7 files — 1385 ms
+
+[drop DB] Roma dropped — 10 ms
+[mongo] database: Roma | agencies: OP1
+
+  [stops] parsed 8,345 records in 46 ms — inserting... done in 176 ms [2dsphere index created]
+  [routes] parsed 432 records in 10 ms — inserting... done in 26 ms
+  [trips] parsed 183,074 records in 781 ms — inserting... done in 840 ms
+  [stop_times] streaming... 5,556,953 records — 49012 ms
+  [calendar_dates] parsed 2,875 records in 10 ms — inserting... done in 37 ms
+  [shapes] streaming... 577,105 records — 3624 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 54597 ms
+
+[daily_trips] data: 20260411
+[daily_trips] service_id attivi: 531
+[daily_trips] 32,753 trips inseriti — 336 ms
+[daily_routes] 314 routes inserite (agencies: OP1) — 41 ms
+[daily_trips] dopo filtro agency: 26,185 trips
+[daily_shapes] 295,820 punti inseriti — 1832 ms
+[daily_stop_times] 760,343 records inseriti — 14570 ms
+[daily_stops] 6,529 fermate inserite [2dsphere index created] — 435 ms
+[daily_stops.routes] 6,529 fermate aggiornate — 32799 ms
+[daily_stops.closeStops] 6,529 fermate elaborate — 15073 ms
+[indexes] creati — 874 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 4 ms
+
+[importGTFS total] 130889 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 6,529 doc — 685 ms
+  [daily_routes] 314 doc — 77 ms
+  [daily_trips] 26,185 doc — 1389 ms
+  [daily_stop_times] 50,000/760,343...  [daily_stop_times] 100,000/760,343...  [daily_stop_times] 150,000/760,343...  [daily_stop_times] 200,000/760,343...  [daily_stop_times] 250,000/760,343...  [daily_stop_times] 300,000/760,343...  [daily_stop_times] 350,000/760,343...  [daily_stop_times] 400,000/760,343...  [daily_stop_times] 450,000/760,343...  [daily_stop_times] 500,000/760,343...  [daily_stop_times] 550,000/760,343...  [daily_stop_times] 600,000/760,343...  [daily_stop_times] 650,000/760,343...  [daily_stop_times] 700,000/760,343...  [daily_stop_times] 750,000/760,343...  [daily_stop_times] 760,343 doc — 50758 ms
+  [daily_shapes] 50,000/295,820...  [daily_shapes] 100,000/295,820...  [daily_shapes] 150,000/295,820...  [daily_shapes] 200,000/295,820...  [daily_shapes] 250,000/295,820...  [daily_shapes] 295,820 doc — 20685 ms
+[sync-remote] indici creati — 10192 ms
+[sync-remote] completato
+
+[total] 215457 ms
+[import_log] scritto su Atlas (success)
+=== Roma completata — 2026-04-11 07:04:47 ===
+
+=== Firenze — 2026-04-11 07:04:47 ===
+◇ injected env (2) from .env // tip: ⌘ enable debugging { debug: true }
+[download] https://stg-regionetoscana.smartregion.toscana.it/mobility/autolinee-toscane/gtfs.zip
+[download] 181.90 MB — 7606 ms
+[extract] 10 files — 4053 ms
+
+[drop DB] Firenze dropped — 12 ms
+[mongo] database: Firenze | agencies: UFI
+
+  [stops] parsed 35,028 records in 356 ms — inserting... done in 396 ms [2dsphere index created]
+  [routes] parsed 981 records in 17 ms — inserting... done in 26 ms
+  [trips] parsed 238,142 records in 1008 ms — inserting... done in 975 ms
+  [stop_times] streaming... 6,320,831 records — 57070 ms
+  [calendar_dates] parsed 11,686 records in 22 ms — inserting... done in 68 ms
+  [shapes] streaming... 12,688,778 records — 75287 ms
+  [frequencies] not in feed, skipped
+  [transfers] not in feed, skipped
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 135290 ms
+
+[daily_trips] data: 20260411
+[daily_trips] service_id attivi: 646
+[daily_trips] 26,742 trips inseriti — 424 ms
+[daily_routes] 81 routes inserite (agencies: UFI) — 37 ms
+[daily_trips] dopo filtro agency: 6,924 trips
+[daily_shapes] 242,597 punti inseriti — 5345 ms
+[daily_stop_times] 168,582 records inseriti — 6549 ms
+[daily_stops] 2,389 fermate inserite [2dsphere index created] — 193 ms
+[daily_stops.routes] 2,389 fermate aggiornate — 775 ms
+[daily_stops.closeStops] 2,389 fermate elaborate — 5499 ms
+[indexes] creati — 231 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 5 ms
+
+[importGTFS total] 166131 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 2,389 doc — 373 ms
+  [daily_routes] 81 doc — 69 ms
+  [daily_trips] 6,924 doc — 410 ms
+  [daily_stop_times] 50,000/168,582...  [daily_stop_times] 100,000/168,582...  [daily_stop_times] 150,000/168,582...  [daily_stop_times] 168,582 doc — 10312 ms
+  [daily_shapes] 50,000/242,597...  [daily_shapes] 100,000/242,597...  [daily_shapes] 150,000/242,597...  [daily_shapes] 200,000/242,597...  [daily_shapes] 242,597 doc — 16442 ms
+[sync-remote] indici creati — 2859 ms
+[sync-remote] completato
+
+[total] 197256 ms
+[import_log] scritto su Atlas (success)
+=== Firenze completata — 2026-04-11 07:08:09 ===
+
+=== Bari — 2026-04-11 07:08:09 ===
+◇ injected env (2) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[download] https://www.amtabservizio.it/gtfs/google_transit.zip
+[download] 3.26 MB — 716 ms
+[extract] 10 files — 118 ms
+
+[drop DB] Bari dropped — 6 ms
+[mongo] database: Bari | agencies: Amtab  S.p.A
+
+  [stops] parsed 1,114 records in 14 ms — inserting... done in 101 ms [2dsphere index created]
+  [routes] parsed 66 records in 3 ms — inserting... done in 26 ms
+  [trips] parsed 4,818 records in 38 ms — inserting... done in 66 ms
+  [stop_times] streaming... 161,178 records — 1704 ms
+  [calendar_dates] parsed 730 records in 4 ms — inserting... done in 24 ms
+  [shapes] streaming... 105,738 records — 834 ms
+  [frequencies] not in feed, skipped
+  [transfers] parsed 0 records in 0 ms — inserting... done in 0 ms
+  [pathways] not in feed, skipped
+  [levels] not in feed, skipped
+
+[import total] 2842 ms
+
+[daily_trips] data: 20260411
+[daily_trips] service_id attivi: 2
+[daily_trips] 3,155 trips inseriti — 55 ms
+[daily_routes] 66 routes inserite (agencies: Amtab  S.p.A) — 28 ms
+[daily_trips] dopo filtro agency: 3,155 trips
+[daily_shapes] 104,768 punti inseriti — 678 ms
+[daily_stop_times] 106,284 records inseriti — 562 ms
+[daily_stops] 1,114 fermate inserite [2dsphere index created] — 90 ms
+[daily_stops.routes] 1,114 fermate aggiornate — 252 ms
+[daily_stops.closeStops] 1,114 fermate elaborate — 2877 ms
+[indexes] creati — 202 ms
+
+[drop collections] calendar_dates, routes, shapes, stop_times, stops, trips — 3 ms
+
+[importGTFS total] 8441 ms
+
+[sync-remote] connessione a remote...
+  [daily_stops] 1,114 doc — 356 ms
+  [daily_routes] 66 doc — 70 ms
+  [daily_trips] 3,155 doc — 311 ms
+  [daily_stop_times] 50,000/106,284...  [daily_stop_times] 100,000/106,284...  [daily_stop_times] 106,284 doc — 7302 ms
+  [daily_shapes] 50,000/104,768...  [daily_shapes] 100,000/104,768...  [daily_shapes] 104,768 doc — 7575 ms
+[import_log] scritto su Atlas (error)
+[2026-04-11 07:08:50] ERRORE: Bari fallita con exit code 1
+
+==============================
+Import giornaliero completato — 2026-04-11 07:08:50
+==============================
