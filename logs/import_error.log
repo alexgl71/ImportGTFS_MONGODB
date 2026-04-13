@@ -1,2 +1,4 @@
 Fatal: connect ETIMEDOUT 65.62.241.122:27017
 [2026-04-11 07:08:50] ERRORE: Bari fallita con exit code 1
+Fatal: connect ETIMEDOUT 65.62.241.122:27017
+[2026-04-13 07:08:05] ERRORE: Roma fallita con exit code 1

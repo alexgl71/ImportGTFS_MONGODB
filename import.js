@@ -193,6 +193,7 @@ const SKIP_IMPORT = process.argv.includes('--skip-import');
 
 async function importGTFS(db, url, agencyIds) {
   const tTotal = performance.now();
+  const collectionErrors = [];
 
   // zipBuffer liberato subito dopo l'estrazione per non tenerlo in heap
   const { files, tmpDir } = await downloadZip(url).then(extractFiles);
@@ -234,6 +235,7 @@ async function importGTFS(db, url, agencyIds) {
       }
     } catch (err) {
       console.error(`\n  [${name}] ERROR — ${err.message}`);
+      collectionErrors.push({ collection: name, error: err.message, ts: new Date() });
     }
     // libera il buffer subito dopo l'import per evitare OOM su feed grandi
     files[filename] = null;
@@ -353,6 +355,7 @@ async function importGTFS(db, url, agencyIds) {
   console.log(`\n[drop collections] ${toDrop.join(', ')} — ${ms(tDrop2)}`);
 
   console.log(`\n[importGTFS total] ${ms(tTotal)}`);
+  return collectionErrors;
 }
 
 async function syncToRemote(localDb) {
@@ -409,6 +412,26 @@ async function syncToRemote(localDb) {
   console.log(`[sync-remote] completato`);
 }
 
+async function logToLocal(localClient, cityName, startedAt, durationMs, status, counts, collectionErrors, errorMsg) {
+  try {
+    const logCol = localClient.db('gtfs_system').collection('import_log');
+    await logCol.insertOne({
+      city:           cityName,
+      date:           new Date().toISOString().slice(0, 10),
+      startedAt,
+      completedAt:    new Date(),
+      durationMs,
+      status,
+      counts:         counts || {},
+      collectionErrors: collectionErrors || [],
+      error:          errorMsg || null,
+    });
+    console.log(`[import_log] scritto in locale (${status})`);
+  } catch (e) {
+    console.error(`[import_log] errore scrittura locale: ${e.message}`);
+  }
+}
+
 async function logToAtlas(cityName, startedAt, durationMs, status, counts, errorMsg) {
   if (!REMOTE_URI) return;
   try {
@@ -449,9 +472,10 @@ async function main() {
 
   const SYNC = process.argv.includes('--sync');
 
+  let collectionErrors = [];
   try {
     if (!SKIP_IMPORT) {
-      await importGTFS(db, url, agencyIds);
+      collectionErrors = await importGTFS(db, url, agencyIds);
     }
     if (SYNC) await syncToRemote(db);
 
@@ -461,12 +485,15 @@ async function main() {
       counts[name] = await db.collection(name).countDocuments().catch(() => 0);
     }
 
+    const status = collectionErrors.length > 0 ? 'partial' : 'success';
     const durationMs = Math.round(performance.now() - tTotal);
     console.log(`\n[total] ${durationMs} ms`);
-    await logToAtlas(cityName, startedAt, durationMs, 'success', counts, null);
+    await logToLocal(client, cityName, startedAt, durationMs, status, counts, collectionErrors, null);
+    await logToAtlas(cityName, startedAt, durationMs, status, counts, null);
   } catch (err) {
     const durationMs = Math.round(performance.now() - tTotal);
     console.error('Fatal:', err.message);
+    await logToLocal(client, cityName, startedAt, durationMs, 'error', null, collectionErrors, err.message);
     await logToAtlas(cityName, startedAt, durationMs, 'error', null, err.message);
     process.exit(1);
   } finally {
